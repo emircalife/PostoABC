@@ -53,11 +53,19 @@ begin
   begin
     LerINI;
 
-    Conn.Params.DriverID  := 'FB';
-    Conn.Params.Database  := 'localhost/3050:' + Database;
-    Conn.Params.UserName  := 'SYSDBA';
-    Conn.Params.Password  := 'masterkey';
-    Conn.Connected        := true;
+    if FileExists(Database) then
+    begin
+      Conn.Params.DriverID  := 'FB';
+      Conn.Params.Database  := 'localhost/3050:' + Database;
+      Conn.Params.UserName  := 'SYSDBA';
+      Conn.Params.Password  := 'masterkey';
+      Conn.Connected        := true;
+    end
+    else
+    begin
+      ShowMessage('Va no arquivo ' + cArquivoIni + ', na linha Database=, altere o caminho e banco de dados. Ex: Database=D:\PostoABC\DB\DBPostoABC.fdb');
+      Application.Terminate;
+    end;
   end;
 end;
 

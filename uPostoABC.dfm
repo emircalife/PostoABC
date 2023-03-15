@@ -3,7 +3,7 @@ object frmPostoABC: TfrmPostoABC
   Top = 0
   BorderIcons = [biSystemMenu, biMinimize]
   Caption = 'Posto ABC'
-  ClientHeight = 276
+  ClientHeight = 208
   ClientWidth = 519
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET

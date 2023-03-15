@@ -29,10 +29,10 @@ uses uDM;
 function TAbastecimentoDAO.Save(AbastecimentoModel: TAbastecimentoModel): Boolean;
 const
   cSalvarBomba : String = 'INSERT INTO ABASTECIMENTO (      '+
-                          'PERCIMPOSTO, DIA, LITROS,        '+
+                          'VALORIMPOSTO, DIA, LITROS,       '+
                           'VALORABASTECIDO, BOMBA           '+
                           ')VALUES(                         '+
-                          ':PPERCIMPOSTO, :PDIA, :PLITROS,  '+
+                          ':PVALORIMPOSTO, :PDIA, :PLITROS, '+
                           ':PVALORABASTECIDO, :PBOMBA )     ';
 
 begin
@@ -40,7 +40,7 @@ begin
     DM.qrySalvar.Close;
     DM.qrySalvar.SQL.Clear;
     DM.qrySalvar.SQL.Add(cSalvarBomba);
-    DM.qrySalvar.ParamByName('PPERCIMPOSTO').AsCurrency      := AbastecimentoModel.PercImposto;
+    DM.qrySalvar.ParamByName('PVALORIMPOSTO').AsCurrency     := AbastecimentoModel.ValorImposto;
     DM.qrySalvar.ParamByName('PDIA').AsDate                  := AbastecimentoModel.Dia;
     DM.qrySalvar.ParamByName('PLITROS').AsCurrency           := AbastecimentoModel.Litros;
     DM.qrySalvar.ParamByName('PVALORABASTECIDO').AsCurrency  := AbastecimentoModel.ValorAbastecido;
@@ -80,11 +80,11 @@ begin
 
       AbastecimentoMdl := TAbastecimentoModel.Create;
 
-      AbastecimentoMdl.PercImposto      := DM.qryListar.FieldByName('PPERCIMPOSTO').AsCurrency;
-      AbastecimentoMdl.Dia              :=  DM.qryListar.FieldByName('PDIA').AsDateTime;
-      AbastecimentoMdl.Litros           :=  DM.qryListar.FieldByName('PLITROS').AsCurrency;
-      AbastecimentoMdl.ValorAbastecido  :=  DM.qryListar.FieldByName('PVALORABASTECIDO').AsCurrency;
-      AbastecimentoMdl.IdBomba          :=  DM.qryListar.FieldByName('PBOMBA').AsInteger;
+      AbastecimentoMdl.ValorImposto     :=  DM.qryListar.FieldByName('VALORIMPOSTO').AsCurrency;
+      AbastecimentoMdl.Dia              :=  DM.qryListar.FieldByName('DIA').AsDateTime;
+      AbastecimentoMdl.Litros           :=  DM.qryListar.FieldByName('LITROS').AsCurrency;
+      AbastecimentoMdl.ValorAbastecido  :=  DM.qryListar.FieldByName('VALORABASTECIDO').AsCurrency;
+      AbastecimentoMdl.IdBomba          :=  DM.qryListar.FieldByName('BOMBA').AsInteger;
     except on E : Exception do
       ShowMessage('Não foi possível listar o abastecimento pelo id' +
         #13 + E.Message);

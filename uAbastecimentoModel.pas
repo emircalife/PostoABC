@@ -5,21 +5,21 @@ interface
   TAbastecimentoModel = class
     private
       FIdAbastecimento: integer;
-      FPercImposto: currency;
+      FValorImposto: currency;
       FDia: tdate;
       FIdBomba: integer;
       FLitros: currency;
       FValorAbastecido: currency;
 
       function GetIdAbastecimento: integer;
-      function GetPercImposto: currency;
+      function GetValorImposto: currency;
       function GetDia: tdate;
       function GetIdBomba: integer;
       function GetLitros: currency;
       function GetValorAbastecido: currency;
 
       procedure SetIdAbastecimento(const Value: integer);
-      procedure SetPercImposto(const Value: currency);
+      procedure SetValorImposto(const Value: currency);
       procedure SetDia(const Value: tdate);
       procedure SetIdBomba(const Value: integer);
       procedure SetLitros(const Value: currency);
@@ -27,7 +27,7 @@ interface
 
     public
       property IdAbastecimento : integer read GetIdAbastecimento write SetIdAbastecimento;
-      property PercImposto : currency read GetPercImposto write SetPercImposto;
+      property ValorImposto : currency read GetValorImposto write SetValorImposto;
       property Dia : tdate read GetDia write SetDia;
       property IdBomba : integer read GetIdBomba write SetIdBomba;
       property Litros : currency read GetLitros write SetLitros;
@@ -42,9 +42,9 @@ begin
   Result := FIdAbastecimento;
 end;
 
-function TAbastecimentoModel.GetPercImposto: currency;
+function TAbastecimentoModel.GetValorImposto: currency;
 begin
-  Result := FPercImposto;
+  Result := FValorImposto;
 end;
 
 function TAbastecimentoModel.GetDia: tdate;
@@ -74,9 +74,9 @@ begin
   FIdAbastecimento := Value;
 end;
 
-procedure TAbastecimentoModel.SetPercImposto(const Value: currency);
+procedure TAbastecimentoModel.SetValorImposto(const Value: currency);
 begin
-  FPercImposto := Value;
+  FValorImposto := Value;
 end;
 
 procedure TAbastecimentoModel.SetDia(const Value: tdate);

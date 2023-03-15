@@ -45,7 +45,7 @@ uses uAbastecimento, uRelAbastecimento, uDM;
 
 procedure TfrmPostoABC.FormCreate(Sender: TObject);
 begin
-  nPercImposto := 13;
+  nPercImposto := 13.00;
 end;
 
 procedure TfrmPostoABC.imgBombaDiesel01Click(Sender: TObject);
@@ -89,16 +89,18 @@ begin
 end;
 
 procedure TfrmPostoABC.btnListarClick(Sender: TObject);
+{
+  Relatório em que os abastecimentos fossem agrupados, exibindo o dia, o tanque,
+    a bomba e o valor. E ao final do relatório a soma total do período.
+}
 const
-  cSQLRel : String = 'SELECT A.IDABASTECIMENTO, A.PERCIMPOSTO,         '+
-                     '       A.DIA, A.LITROS, A.VALORABASTECIDO,       '+
-                     '       T.IDTANQUE, T.NOMETANQUE,                 '+
-                     '       B.IDBOMBA, B.NOMEBOMBA, B.TIPOCOMBUSTIVEL '+
-                     ' FROM ABASTECIMENTO A                            '+
-                     ' INNER JOIN BOMBA B ON (A.BOMBA = B.IDBOMBA)     '+
-                     ' INNER JOIN TANQUE T ON (A.BOMBA = T.BOMBA)      '+
-                     ' ORDER BY A.DIA, T.IDTANQUE, B.IDBOMBA,          '+
-                     '          A.VALORABASTECIDO                      ';
+  cSQLRel : String = 'SELECT A.DIA, T.NOMETANQUE, B.NOMEBOMBA,                '+
+                     '        CAST((A.VALORIMPOSTO + A.VALORABASTECIDO)       '+
+                     '             AS NUMERIC(18, 2))VALORCOBRADO             '+
+                     'FROM ABASTECIMENTO A                                    '+
+                     'INNER JOIN BOMBA B ON (A.BOMBA = B.IDBOMBA)             '+
+                     'INNER JOIN TANQUE T ON (B.IDBOMBA = T.BOMBA)            '+
+                     'GROUP BY A.DIA, T.NOMETANQUE, B.NOMEBOMBA, VALORCOBRADO ';
 
 begin
   try
@@ -112,14 +114,14 @@ begin
     end;
 
     frmRelAbastecimento := TfrmRelAbastecimento.Create(self);
-    frmRelAbastecimento.RLReport1.Preview();
+    frmRelAbastecimento.rllTitulo.Caption          := 'Listagem de '+
+                                                      'Abastecimentos';
+    frmRelAbastecimento.rllValorComImposto.Caption := 'R$ (acrescido o valor'+
+                      ' do imposto de ' + FormatFloat('.00',nPercImposto) + '%';
+    frmRelAbastecimento.RLReport1.PreviewModal();
   finally
     FreeAndNil(frmRelAbastecimento);
   end;
-{
-  Relatório em que os abastecimentos fossem agrupados, exibindo o dia, o tanque,
-    a bomba e o valor. E ao final do relatório a soma total do período.
-}
 end;
 
 function TfrmPostoABC.CalculaImposto(nPercImposto:Currency; nValorCobrado: Currency):Currency;
@@ -191,7 +193,7 @@ begin
     AbastecimentoModel.Dia              := Date();
     AbastecimentoModel.Litros           := frmAbastecimento.Litros;
     AbastecimentoModel.ValorAbastecido  := frmAbastecimento.ValorAbastecido;
-    AbastecimentoModel.PercImposto      := CalculaImposto(nPercImposto, AbastecimentoModel.ValorAbastecido);
+    AbastecimentoModel.ValorImposto     := CalculaImposto(nPercImposto, AbastecimentoModel.ValorAbastecido);
 
     AbastecimentoDAO.Save(AbastecimentoModel);
 
